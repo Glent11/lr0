@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    environment:
+      REDIS_HOST: localhost 
+    depends_on:
+      redis:
+        condition: service_healthy
+    network_mode: host
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    network_mode: host
